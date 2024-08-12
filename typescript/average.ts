@@ -1,4 +1,4 @@
-let list: number[] = [1, 2, 3, 4, 5];
+import data from './sample_arraylist.json'
 
 function average(arr: number[]): number | undefined {
     if (arr.length === 0) {
@@ -14,4 +14,4 @@ function average(arr: number[]): number | undefined {
     return sum/arr.length;
 }
 
-console.log(`average is ${average(list)}`)
+console.log(`average is ${average(data)}`)

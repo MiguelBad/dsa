@@ -31,11 +31,11 @@ function quickSort(arr: number[], low: number, high: number): void {
 }
 
 
-function sortList(): void {
+function sortList(): number[] {
     const givenList: number[] = data;
     quickSort(givenList, 0, givenList.length - 1);
-    console.log(givenList);
+    console.log(givenList)
+    return givenList;
 }
 
-
-sortList();
+export default sortList;
