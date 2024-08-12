@@ -1,10 +1,10 @@
-type BTNode<T> = {
+export type BTNode<T> = {
     item: T;
     left: BTNode<T> | null;
     right: BTNode<T> | null;
 }
 
-function createTree(): BTNode<number> {
+export function createTree(): BTNode<number> {
     const createNode = (item: number): BTNode<number> => ({
         item,
         left: null,
