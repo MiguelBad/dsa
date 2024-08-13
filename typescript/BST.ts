@@ -6,10 +6,10 @@ type BTNode = {
 
 class BST {
     height: number;
-    head: BTNode | null;
+    root: BTNode | null;
 
     constructor() {
-        this.head = null;
+        this.root = null;
         this.height = 0;
     }
 
@@ -20,12 +20,12 @@ class BST {
             right: null,
         };
 
-        if (!this.head) {
-            this.head = node;
+        if (!this.root) {
+            this.root = node;
             return;
         }
 
-        this.insertNode(node, this.head);
+        this.insertNode(node, this.root);
     }
 
     private insertNode(node: BTNode, curr: BTNode): void {
@@ -45,11 +45,11 @@ class BST {
     }
 
     search(n: number): BTNode | undefined {
-        if (!this.head) {
+        if (!this.root) {
             return undefined;
         }
 
-        return this.searchNode(n, this.head);
+        return this.searchNode(n, this.root);
     }
 
     private searchNode(n: number, curr: BTNode): BTNode | undefined {
@@ -59,18 +59,61 @@ class BST {
 
         if (curr.item === n) {
             return curr;
-        } else {
-            if (curr.item > n) {
-                return this.searchNode(n, curr.left);
-            } else {
-                return this.searchNode(n, curr.right);
-            }
         }
+
+        if (curr.item > n) {
+            return this.searchNode(n, curr.left);
+        }
+        return this.searchNode(n, curr.right);
     }
 
-    // delete(item: number): number {
-    //     
-    // }
+    delete(item: number): number | undefined {
+        if (this.root.item === item) {
+            // TODO: CHANGE ROOT
+        }
+
+        const deleteThis: (BTNode | string)[] = this.deleteNode(item, this.root);
+        if (!deleteThis) {
+            return undefined;
+        }
+
+        const parentNode = deleteThis[0] as BTNode;
+        let childToDelete = deleteThis[1] === 'left' ? parentNode.left : parentNode.right
+        const temp = childToDelete; 
+        if (!childToDelete.left && !childToDelete.right) {
+            childToDelete = null
+            return temp.item;
+        }
+
+        if (!childToDelete.left || !childToDelete.right) {
+            const childOfChild: BTNode = childToDelete.left || childToDelete.right
+            childToDelete = childOfChild;
+            return temp.item;
+        }
+        
+        childToDelete = childToDelete.right
+        childToDelete.left = temp.left
+        return temp.item;
+    }
+
+    private deleteNode(item: number, curr: BTNode): (BTNode | string)[] | undefined {
+        if (curr.left === null || curr.right === null) {
+            return undefined
+        }
+
+        if (curr.left.item === item) {
+            return [curr, 'left'];
+        }
+
+        if (curr.right.item === item) {
+            return [curr, 'right'];
+        }
+
+        if (curr.item > item) {
+            return this.deleteNode(item, curr.left);
+        }
+        return this.deleteNode(item, curr.right);
+    }
 
     // preOrderTraversal(): number[] {
     // }
@@ -96,8 +139,8 @@ class BST {
 
 function BSTTest() {
     const addLog = (item: number | null) => {
-        console.log('head item', myBST.head?.item);
-        console.log('head', myBST.head);
+        console.log('root item', myBST.root?.item);
+        console.log('root', myBST.root);
 
         if (item) {
             console.log(`\ninsert ${item}`);
@@ -128,7 +171,11 @@ function BSTTest() {
     // search test
     console.log('\nSearch Test:');
     console.log('Search for 8:', myBST.search(8));
-    console.log('Search for 1:', myBST.search(1));
+    console.log('Search for 7:', myBST.search(7));
+
+    // delete test
+    console.log('test test')
+    console.log(myBST.delete(2));
 }
 
 BSTTest();
