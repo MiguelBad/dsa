@@ -6,10 +6,10 @@ type BTNode = {
 
 class BST {
     height: number;
-    head?: BTNode;
+    head: BTNode | null;
 
     constructor() {
-        this.head = undefined;
+        this.head = null;
         this.height = 0;
     }
 
@@ -32,24 +32,46 @@ class BST {
         if (curr.item > node.item) {
             if (curr.left === null) {
                 curr.left = node;
-                return;
+            } else {
+                this.insertNode(node, curr.left);
             }
-            this.insertNode(node, curr.left);
         } else {
             if (curr.right === null) {
                 curr.right = node;
-                return;
+            } else {
+                this.insertNode(node, curr.right);
             }
-            this.insertNode(node, curr.right);
+        }
+    }
+
+    search(n: number): BTNode | undefined {
+        if (!this.head) {
+            return undefined;
+        }
+
+        return this.searchNode(n, this.head);
+    }
+
+    private searchNode(n: number, curr: BTNode): BTNode | undefined {
+        if (!curr) {
+            return undefined;
+        }
+
+        if (curr.item === n) {
+            return curr;
+        } else {
+            if (curr.item > n) {
+                return this.searchNode(n, curr.left);
+            } else {
+                return this.searchNode(n, curr.right);
+            }
         }
     }
 
     // delete(item: number): number {
+    //     
     // }
-    //
-    // search(n: number): number {
-    // }
-    //
+
     // preOrderTraversal(): number[] {
     // }
     //
@@ -72,8 +94,8 @@ class BST {
     // }
 }
 
-function addTestBST() {
-    const log = (item: number | null) => {
+function BSTTest() {
+    const addLog = (item: number | null) => {
         console.log('head item', myBST.head?.item);
         console.log('head', myBST.head);
 
@@ -84,22 +106,29 @@ function addTestBST() {
 
     const myBST = new BST();
 
-    log(7);
+    // add test
+    addLog(7);
     myBST.insert(7);
 
-    log(1);
+    addLog(1);
     myBST.insert(1);
 
-    log(3);
+    addLog(3);
     myBST.insert(3);
 
-    log(9);
+    addLog(9);
     myBST.insert(9);
 
-    log(7);
+    addLog(7);
     myBST.insert(7);
 
-    log(null);
+    addLog(null);
+
+
+    // search test
+    console.log('\nSearch Test:');
+    console.log('Search for 8:', myBST.search(8));
+    console.log('Search for 1:', myBST.search(1));
 }
 
-addTestBST();
+BSTTest();
