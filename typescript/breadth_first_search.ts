@@ -39,29 +39,31 @@ class Queue<T> {
     }
 }
 
-function breadthFirstSearch(head: BTNode<number>, needle: number): boolean {
+function BFS(head: BTNode<number>, needle: number): boolean {
     const BTQueue = new Queue();
-    BTQueue.enqueue(head)
+    BTQueue.enqueue(head);
 
     while (BTQueue.length) {
-        const curr = BTQueue.deque() as BTNode<number> | undefined | null;
+        const curr = BTQueue.deque() as BTNode<number> | undefined;
         if (!curr) {
             continue;
         }
 
-        if (curr?.item === needle) {
+        if (curr.item === needle) {
             return true;
         }
 
-        BTQueue.enqueue(curr.left)
-        BTQueue.enqueue(curr.right)
+        BTQueue.enqueue(curr.left);
+        BTQueue.enqueue(curr.right);
     }
+
+    return false;
 }
 
-function main() {
+function BreadthFirstSearch() {
     const tree = createTree();
-    const arr = breadthFirstSearch(tree, 100);
-    console.log(arr)
+    const search = BFS(tree, 105);
+    console.log(search);
 }
 
-main();
+BreadthFirstSearch();
