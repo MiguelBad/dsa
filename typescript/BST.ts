@@ -22,24 +22,30 @@ class BST {
 
         if (!this.root) {
             this.root = node;
+            this.height++;
             return;
         }
 
-        this.insertNode(node, this.root);
+        const height: number = this.insertNode(node, this.root);
+        if (height > this.height){
+            this.height = height
+        }
     }
 
-    private insertNode(node: BTNode, curr: BTNode): void {
+    private insertNode(node: BTNode, curr: BTNode): any { //change later any type
         if (curr.item > node.item) {
             if (curr.left === null) {
                 curr.left = node;
+                return 1;
             } else {
-                this.insertNode(node, curr.left);
+                return 1 + this.insertNode(node, curr.left);
             }
         } else {
             if (curr.right === null) {
                 curr.right = node;
+                return 1;
             } else {
-                this.insertNode(node, curr.right);
+                return 1 + this.insertNode(node, curr.right);
             }
         }
     }
@@ -79,7 +85,7 @@ class BST {
 
         const parentNode = deleteThis[0] as BTNode;
         let childToDelete = deleteThis[1] === 'left' ? parentNode.left : parentNode.right
-        const temp = childToDelete; 
+        const temp = childToDelete;
         if (!childToDelete.left && !childToDelete.right) {
             childToDelete = null
             return temp.item;
@@ -90,7 +96,7 @@ class BST {
             childToDelete = childOfChild;
             return temp.item;
         }
-        
+
         childToDelete = childToDelete.right
         childToDelete.left = temp.left
         return temp.item;
@@ -141,6 +147,7 @@ function BSTTest() {
     const addLog = (item: number | null) => {
         console.log('root item', myBST.root?.item);
         console.log('root', myBST.root);
+        console.log('height', myBST.height);
 
         if (item) {
             console.log(`\ninsert ${item}`);
