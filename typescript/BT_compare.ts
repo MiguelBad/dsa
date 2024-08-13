@@ -1,6 +1,6 @@
 import { BTNode, createTree, createTree2 } from './binary_tree'
 
-function compare(leaf1: BTNode<number>, leaf2: BTNode<number>,): boolean {
+function compare(leaf1: BTNode<number> | null, leaf2: BTNode<number> | null,): boolean {
     if (leaf1 === null && leaf2 === null) {
         return true;
     }
