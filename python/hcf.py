@@ -1,5 +1,4 @@
-"""
-def main(a, b):
+def iterative_hcf(a, b):
     while a != b:
         if a > b:
             a = a - b
@@ -9,13 +8,6 @@ def main(a, b):
 
     print(a)
 
-def main(a, b):
-    while b != 0:
-        a, b = b, a % b
-
-    print(a)
-"""
-
 
 def main(a, b):
     while b != 0:
@@ -24,4 +16,8 @@ def main(a, b):
     print(a)
 
 
-main(9, 6)
+a = 9
+b = 6
+
+main(a, b)
+iterative_hcf(a, b)

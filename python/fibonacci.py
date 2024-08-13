@@ -1,42 +1,28 @@
-"""
-list = []
-current = 0
+def fib_iterative(n, low, high, fib):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
 
-for i:=0 to n do
+    for _ in range(1, n):
+        fib = low + high
+        temp = high
+        high = low + high
+        low = temp
 
-    if current < 1 then
-        current += 1
-    else:
-        current += list[-1]
-
-    append current to list
-
-fib = [0]
-current = 0
-
-for i in range(20):
-    if current < 1:
-        current += 1
-    else:
-        current += fib[-2]
-
-    fib.append(current)
-
-print(fib)
-
-===============================
-
-0, 1, 1, 2, 3, 5, 8, 13, 21
-"""
+    return fib
 
 
-def main(n):
-    if n < 2:
+def fib_list_recursion(n):
+    if n == 0:
+        return [0]
+    elif n == 1:
         return [0, 1]
     else:
-        fib = main(n - 1)
+        fib = fib_list_recursion(n - 1)
         fib.append(fib[-1] + fib[-2])
         return fib
 
 
-print(main(20))
+print(fib_iterative(20, 0, 1, 0))
+print(fib_list_recursion(20))

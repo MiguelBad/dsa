@@ -1,5 +1,4 @@
-''' Implementation of  Stack '''
-
+# Implementation of  Stack
 
 class Node:
     def __init__(self, item):

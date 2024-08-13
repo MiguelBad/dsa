@@ -1,13 +1,3 @@
-"""
-PSUEDOCODE
-
-n = array length
-
-for i in n do
-    for j in range i +
-"""
-
-
 def main(arr):
     n = len(arr)
 
