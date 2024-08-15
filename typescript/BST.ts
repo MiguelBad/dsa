@@ -32,7 +32,7 @@ class BST {
         }
     }
 
-    private insertNode(node: BTNode, curr: BTNode): any { //change later any type
+    private insertNode(node: BTNode, curr: BTNode): number {
         if (curr.item > node.item) {
             if (curr.left === null) {
                 curr.left = node;
@@ -78,7 +78,7 @@ class BST {
             // TODO: CHANGE ROOT
         }
 
-        const deleteThis: (BTNode | string)[] = this.deleteNode(item, this.root);
+        const deleteThis: (BTNode | string)[] | string= this.deleteNode(item, this.root);
         if (!deleteThis) {
             return undefined;
         }
@@ -100,6 +100,7 @@ class BST {
 
         // one of the child node is null
         if (!childToDelete.left || !childToDelete.right) {
+            console.log('here')
             const childOfChild: BTNode = childToDelete.left || childToDelete.right
             if (deleteThis[1] === 'left') {
                 parentNode.left = childOfChild
