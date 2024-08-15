@@ -27,7 +27,7 @@ class BST {
         }
 
         const height: number = this.insertNode(node, this.root);
-        if (height > this.height){
+        if (height > this.height) {
             this.height = height
         }
     }
@@ -84,34 +84,48 @@ class BST {
         }
 
         const parentNode = deleteThis[0] as BTNode;
+        // im avoiding ternary operation to be easier to understand
+        // but i think this is clearer. 
         let childToDelete = deleteThis[1] === 'left' ? parentNode.left : parentNode.right
-        const temp = childToDelete;
+
+        // both child notes is null
         if (!childToDelete.left && !childToDelete.right) {
-            childToDelete = null
-            return temp.item;
+            if (deleteThis[1] === 'left') {
+                parentNode.left = null;
+            } else {
+                parentNode.right = null;
+            }
+            return childToDelete.item;
         }
 
+        // one of the child node is null
         if (!childToDelete.left || !childToDelete.right) {
             const childOfChild: BTNode = childToDelete.left || childToDelete.right
-            childToDelete = childOfChild;
-            return temp.item;
+            if (deleteThis[1] === 'left') {
+                parentNode.left = childOfChild
+            } else {
+                parentNode.right = childOfChild
+            }
+            return childToDelete.item;
         }
 
-        childToDelete = childToDelete.right
-        childToDelete.left = temp.left
-        return temp.item;
+        // no child node is null
+        // parentNode.left = childToDelete.left
+        // childToDelete = childToDelete.right
+        // childToDelete.left = childToDelete.left
+        return childToDelete.item;
     }
 
     private deleteNode(item: number, curr: BTNode): (BTNode | string)[] | undefined {
-        if (curr.left === null || curr.right === null) {
+        if (curr.left === null && curr.right === null) {
             return undefined
         }
 
-        if (curr.left.item === item) {
+        if (curr.left?.item === item) {
             return [curr, 'left'];
         }
 
-        if (curr.right.item === item) {
+        if (curr.right?.item === item) {
             return [curr, 'right'];
         }
 
@@ -144,45 +158,43 @@ class BST {
 }
 
 function BSTTest() {
-    const addLog = (item: number | null) => {
+    const log = (item: number | null, action: string | undefined) => {
+        if (item) {
+            console.log(`\n${action} ${item}`);
+        }
+
         console.log('root item', myBST.root?.item);
         console.log('root', myBST.root);
         console.log('height', myBST.height);
-
-        if (item) {
-            console.log(`\ninsert ${item}`);
-        }
     }
 
     const myBST = new BST();
 
     // add test
-    addLog(7);
     myBST.insert(7);
+    log(7, 'Insert');
 
-    addLog(1);
     myBST.insert(1);
+    log(1, 'Insert');
 
-    addLog(3);
     myBST.insert(3);
+    log(3, 'Insert');
 
-    addLog(9);
     myBST.insert(9);
+    log(9, 'Insert');
 
-    addLog(7);
     myBST.insert(7);
-
-    addLog(null);
-
+    log(7, 'Insert');
 
     // search test
-    console.log('\nSearch Test:');
+    console.log('\n================\nSearch Test:');
     console.log('Search for 8:', myBST.search(8));
     console.log('Search for 7:', myBST.search(7));
 
     // delete test
-    console.log('test test')
-    console.log(myBST.delete(2));
+    console.log('\n================\nDelete Test:')
+    console.log('Deleted:', myBST.delete(3));
+    log(3, 'Delete')
 }
 
 BSTTest();
