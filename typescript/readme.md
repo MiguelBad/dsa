@@ -1,1 +1,1 @@
-practicing typescript by rewriting dsa  from python
+practicing typescript and i prefer coding in bracket syntax
