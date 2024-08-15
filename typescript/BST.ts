@@ -74,26 +74,24 @@ class BST {
     }
 
     delete(item: number): number | undefined {
-        if (this.root.item === item) {
-            // TODO: CHANGE ROOT
-        }
-
-        const deleteThis: (BTNode | string)[] | string= this.deleteNode(item, this.root);
-        if (!deleteThis) {
-            return undefined;
-        }
-
+        const deleteThis: (BTNode | string)[] | string = this.deleteNode(item, this.root);
         const parentNode = deleteThis[0] as BTNode;
         // im avoiding ternary operation to be easier to understand
         // but i think this is clearer. 
         let childToDelete = deleteThis[1] === 'left' ? parentNode.left : parentNode.right
 
+        if (!deleteThis) {
+            return undefined;
+        }
+
         // both child notes is null
         if (!childToDelete.left && !childToDelete.right) {
             if (deleteThis[1] === 'left') {
                 parentNode.left = null;
-            } else {
+            } else if (deleteThis[1] === 'right') {
                 parentNode.right = null;
+            } else {
+                this.root = null
             }
             return childToDelete.item;
         }
@@ -104,8 +102,10 @@ class BST {
             const childOfChild: BTNode = childToDelete.left || childToDelete.right
             if (deleteThis[1] === 'left') {
                 parentNode.left = childOfChild
-            } else {
+            } else if (deleteThis[1] === 'right') {
                 parentNode.right = childOfChild
+            } else {
+                this.root = childOfChild;
             }
             return childToDelete.item;
         }
@@ -136,6 +136,42 @@ class BST {
         return this.deleteNode(item, curr.right);
     }
 
+    // is the smallest node after the root node
+    // e.g. if  root is 7, successor is should be something like 8
+    findSucessor(): number | null {
+        if (!this.root || !this.root.right) {
+            return null;
+        }
+
+        return this.findSucessorParent(this.root.right).item;
+    }
+
+    private findSucessorParent(curr: BTNode): BTNode {
+        while (curr.left) {
+            curr = curr.left
+        }
+
+        return curr;
+    }
+
+    // similar to  successor, predecessor is the largest node before root node
+    // e.g. if  root is 7, successor is should be something like 6
+    findPredecessor(): number | null {
+        if (!this.root || !this.root.left) {
+            return null;
+        }
+
+        return this.findPredecessorParent(this.root.left).item;
+    }
+
+    private findPredecessorParent(curr: BTNode): BTNode {
+        while (curr.right) {
+            curr = curr.right
+        }
+
+        return curr;
+    }
+
     // preOrderTraversal(): number[] {
     // }
     //
@@ -149,12 +185,6 @@ class BST {
     // }
     //
     // findMax(): number {
-    // }
-    //
-    // findPredecessor() {
-    // }
-    //
-    // findSucessor() {
     // }
 }
 
@@ -187,6 +217,9 @@ function BSTTest() {
     myBST.insert(7);
     log(7, 'Insert');
 
+    myBST.insert(10);
+    log(10, 'Insert');
+
     // search test
     console.log('\n================\nSearch Test:');
     console.log('Search for 8:', myBST.search(8));
@@ -194,8 +227,16 @@ function BSTTest() {
 
     // delete test
     console.log('\n================\nDelete Test:')
-    console.log('Deleted:', myBST.delete(3));
-    log(3, 'Delete')
+    console.log('Deleted:', myBST.delete(9));
+    log(9, 'Delete')
+
+    // find predecessor
+    console.log('\n================\nPredecessor Test:')
+    console.log(myBST.findPredecessor());
+
+    // find successor
+    console.log('\n================\nSuccessor Test:')
+    console.log(myBST.findSucessor());
 }
 
 BSTTest();
