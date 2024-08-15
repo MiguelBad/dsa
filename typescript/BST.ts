@@ -98,7 +98,6 @@ class BST {
 
         // one of the child node is null
         if (!childToDelete.left || !childToDelete.right) {
-            console.log('here')
             const childOfChild: BTNode = childToDelete.left || childToDelete.right
             if (deleteThis[1] === 'left') {
                 parentNode.left = childOfChild
@@ -110,16 +109,41 @@ class BST {
             return childToDelete.item;
         }
 
-        // no child node is null
-        // parentNode.left = childToDelete.left
-        // childToDelete = childToDelete.right
-        // childToDelete.left = childToDelete.left
+        // item to delete is equal to root val
+        if (deleteThis[1] === 'root') {
+            const successorParent = this.findSucessorParent(this.root.right);
+            const successor = successorParent.left;
+
+            successor.left = this.root.left;
+            successor.right = this.root.right;
+            this.root = successor;
+            successorParent.left = null;
+            return childToDelete.item;
+        }
+
+        // item to delete have both left and right children
+        let successorParent = this.findSucessorParent(childToDelete);
+        const successor = successorParent.left;
+
+console.log(parentNode)
+console.log(successorParent)
+console.log(successor)
+
+        if (deleteThis[1] === 'left') {
+        } else  {
+        }
+        successorParent.left = successor.left;
+        successorParent.right = successor.right;
+        successorParent = successor;
         return childToDelete.item;
     }
 
     private deleteNode(item: number, curr: BTNode): (BTNode | string)[] | undefined {
+        if (item === curr.item) {
+            return [curr, 'root'];
+        }
         if (curr.left === null && curr.right === null) {
-            return undefined
+            return undefined;
         }
 
         if (curr.left?.item === item) {
@@ -132,7 +156,7 @@ class BST {
 
         if (curr.item > item) {
             return this.deleteNode(item, curr.left);
-        }
+        };
         return this.deleteNode(item, curr.right);
     }
 
@@ -143,15 +167,17 @@ class BST {
             return null;
         }
 
-        return this.findSucessorParent(this.root.right).item;
+        return this.findSucessorParent(this.root.right)?.left.item || null;
     }
 
     private findSucessorParent(curr: BTNode): BTNode {
+        let parent: BTNode = null;
         while (curr.left) {
-            curr = curr.left
+            parent = curr
+            curr = curr.left;
         }
 
-        return curr;
+        return parent;
     }
 
     // similar to  successor, predecessor is the largest node before root node
@@ -161,15 +187,17 @@ class BST {
             return null;
         }
 
-        return this.findPredecessorParent(this.root.left).item;
+        return this.findPredecessorParent(this.root.left)?.right.item || null;
     }
 
     private findPredecessorParent(curr: BTNode): BTNode {
+        let parent: BTNode = null;
         while (curr.right) {
-            curr = curr.right
+            parent = curr
+            curr = curr.right;
         }
 
-        return curr;
+        return parent;
     }
 
     // preOrderTraversal(): number[] {
@@ -214,8 +242,8 @@ function BSTTest() {
     myBST.insert(9);
     log(9, 'Insert');
 
-    myBST.insert(7);
-    log(7, 'Insert');
+    myBST.insert(8);
+    log(8, 'Insert');
 
     myBST.insert(10);
     log(10, 'Insert');
@@ -227,7 +255,8 @@ function BSTTest() {
 
     // delete test
     console.log('\n================\nDelete Test:')
-    console.log('Deleted:', myBST.delete(9));
+    // console.log('Deleted:', myBST.delete(9));
+    myBST.delete(9)
     log(9, 'Delete')
 
     // find predecessor
