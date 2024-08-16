@@ -73,6 +73,7 @@ class BST {
         return this.searchNode(n, curr.right);
     }
 
+    // TODO - UPDATE LENGTH
     delete(item: number): number | undefined {
         const deleteThis: (BTNode | string)[] | string = this.deleteNode(item, this.root);
         const parentNode = deleteThis[0] as BTNode;
@@ -108,6 +109,10 @@ class BST {
             }
             return childToDelete.item;
         }
+        // TODO -  no child node is null
+        // parentNode.left = childToDelete.left
+        // childToDelete = childToDelete.right
+        // childToDelete.left = childToDelete.left
 
         // item to delete is equal to root val
         if (deleteThis[1] === 'root') {
