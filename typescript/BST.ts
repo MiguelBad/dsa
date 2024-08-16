@@ -109,10 +109,6 @@ class BST {
             }
             return childToDelete.item;
         }
-        // TODO -  no child node is null
-        // parentNode.left = childToDelete.left
-        // childToDelete = childToDelete.right
-        // childToDelete.left = childToDelete.left
 
         // item to delete is equal to root val
         if (deleteThis[1] === 'root') {
@@ -127,19 +123,18 @@ class BST {
         }
 
         // item to delete have both left and right children
-        let successorParent = this.findSucessorParent(childToDelete);
-        const successor = successorParent.left;
-
-console.log(parentNode)
-console.log(successorParent)
-console.log(successor)
+        const successorParent: BTNode = this.findSucessorParent(childToDelete);
+        let successor: BTNode = successorParent.left || successorParent;
 
         if (deleteThis[1] === 'left') {
-        } else  {
+            parentNode.left = successor;
+        } else {
+            parentNode.right = successor;
         }
-        successorParent.left = successor.left;
-        successorParent.right = successor.right;
-        successorParent = successor;
+
+        successorParent.left = null;
+        successor.left = childToDelete?.left;
+        successor.right = childToDelete?.right;
         return childToDelete.item;
     }
 
@@ -172,7 +167,7 @@ console.log(successor)
             return null;
         }
 
-        return this.findSucessorParent(this.root.right)?.left.item || null;
+        return this.findSucessorParent(this.root.right)?.left.item || this.root.right.item;
     }
 
     private findSucessorParent(curr: BTNode): BTNode {
@@ -192,7 +187,7 @@ console.log(successor)
             return null;
         }
 
-        return this.findPredecessorParent(this.root.left)?.right.item || null;
+        return this.findPredecessorParent(this.root.left)?.right.item || this.root.right.item;
     }
 
     private findPredecessorParent(curr: BTNode): BTNode {
