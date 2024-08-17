@@ -23,7 +23,7 @@ function fibonacci_list(i: number): number[] {
     if (i === 1) return [0, 1];
 
     let arr: number[] = [0, 1];
-    for (let j = 2; j < i; j++) {
+    for (let j = 2; j < i + 1; j++) {
         arr.push(arr[j - 1] + arr[j - 2]);
     }
 
