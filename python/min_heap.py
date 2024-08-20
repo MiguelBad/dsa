@@ -1,80 +1,82 @@
 class MinHeap:
     def __init__(self) -> None:
-        self.length: int = 0
         self.array: list[int] = []
+
+    def length(self) -> int:
+        return len(self.array)
 
     def insert(self, item: int) -> None:
         self.array.append(item)
-        self.length += 1
-        self.upHeap(self.length - 1)
+        self.up_heap(self.length() - 1)
 
     def delete(self) -> int | None:
-        if self.length == 0:
+        if self.length() == 0:
             return None
 
-        out = self.array[self.length]
-        self.length -= 1
-        self.array[0] = self.array[self.length]
-        self.array.pop()
-        self.downHeap(self.length)
-        return out
+        if self.length() - 1 == 0:
+            return self.array.pop()
 
-    def upHeap(self, idx: int) -> None:
-        if self.length < 2:
+        item = self.array[0]
+        self.array[0] = self.array.pop()
+        self.down_heap(0)
+        return item
+
+    def up_heap(self, idx: int) -> None:
+        if idx < 1:
             return
 
-        parentIdx = self.parentIdx(idx)
-        parentVal = self.array[parentIdx]
-        currentVal = self.array[idx]
+        parent_idx = self.parent_idx(idx)
+        parent_val = self.array[parent_idx]
 
-        if parentVal > currentVal:
-            self.array[parentIdx] = currentVal
-            self.array[idx] = parentVal
-            self.upHeap(parentIdx)
+        if parent_val > self.array[idx]:
+            self.array[parent_idx] = self.array[idx]
+            self.array[idx] = parent_val
+            self.up_heap(parent_idx)
 
-    def downHeap(self, idx: int) -> None:
-        leftIdx = self.leftIdx(idx)
-        rightIdx = self.rightIdx(idx)
+    def down_heap(self, idx: int) -> None:
+        left_idx = self.left_idx(idx)
+        right_idx = self.right_idx(idx)
 
-        if self.length < leftIdx:
+        if left_idx >= self.length() - 1 or not self.array[idx]:
             return
 
-        leftVal = self.array[leftIdx]
-        rightVal = self.array[rightIdx]
-        currVal = self.array[idx]
+        left_val = self.array[left_idx]
+        right_val = self.array[right_idx]
 
-        if leftIdx > rightIdx and rightIdx < currVal:
-            self.array[rightIdx] = currVal
-            self.array[currVal] = rightVal
-            self.downHeap(rightIdx)
-        elif leftIdx < rightIdx and leftIdx < currVal:
-            self.array[leftIdx] = currVal
-            self.array[currVal] = leftVal
-            self.downHeap(leftIdx)
+        if left_val <= right_val and left_val < self.array[idx]:
+            self.array[left_idx] = self.array[idx]
+            self.array[idx] = left_val
+            self.down_heap(left_idx)
+        elif left_val > right_val and right_val < self.array[idx]:
+            self.array[right_idx] = self.array[idx]
+            self.array[idx] = right_val
+            self.down_heap(right_idx)
 
-    def parentIdx(self, idx: int) -> int:
+    # formula to get parent index
+    def parent_idx(self, idx: int) -> int:
         return (idx - 1) // 2
 
-    def leftIdx(self, idx: int) -> int:
+    # formula to get the left child index
+    def left_idx(self, idx: int) -> int:
         return idx * 2 + 1
 
-    def rightIdx(self, idx: int) -> int:
+    def right_idx(self, idx: int) -> int:
         return idx * 2 + 2
 
 
-test = MinHeap()
+# test
+def test():
+    min_heap = MinHeap()
+    items = [9, 7, 4, 1, 5, 4, 2]
 
-test.insert(9)
-print(test.array)
-test.insert(7)
-print(test.array)
-test.insert(4)
-print(test.array)
-test.insert(1)
-print(test.array)
-test.insert(6)
-print(test.array)
-test.insert(4)
-print(test.array)
-test.insert(3)
-print(test.array)
+    print(min_heap.array)
+    for i in items:
+        min_heap.insert(i)
+        print(min_heap.array)
+
+    for _ in items:
+        min_heap.delete()
+        print(min_heap.array)
+
+
+test()

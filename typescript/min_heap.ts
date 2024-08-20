@@ -30,12 +30,16 @@ class MinHeap {
         const leftIdx = this.leftIdx(idx);
         const rightIdx = this.rightIdx(idx);
 
-        if (!this.array[leftIdx]) {
+        if (idx > this.length || leftIdx >= this.length) {
             return;
         }
 
         const leftVal = this.array[leftIdx];
-        const rightVal = this.array[rightIdx];
+        let rightVal = this.array[rightIdx];
+
+        if (rightIdx >= this.length) {
+            rightVal = Infinity;
+        }
 
         if (leftVal > rightVal && rightVal < this.array[idx]) {
             this.array[rightIdx] = this.array[idx];
@@ -78,17 +82,17 @@ class MinHeap {
 }
 
 // test
-const heap = new MaxHeap();
+const heap = new MinHeap();
 
 // add
 console.log(heap.array);
-heap.insert(1);
+heap.insert(9);
 console.log(heap.array);
 heap.insert(4);
 console.log(heap.array);
 heap.insert(3);
 console.log(heap.array);
-heap.insert(7);
+heap.insert(1);
 console.log(heap.array);
 heap.insert(7);
 console.log(heap.array);
