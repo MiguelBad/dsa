@@ -1,4 +1,4 @@
-class MaxHeap {
+class MinHeap {
     length: number;
     array: number[];
 
@@ -10,7 +10,7 @@ class MaxHeap {
     insert(item: number): void {
         this.array[this.length] = item;
         this.length += 1;
-        this.upHeap(this.length);
+        this.upHeap(this.length - 1);
     }
 
     delete(): number | undefined {
