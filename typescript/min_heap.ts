@@ -29,27 +29,23 @@ class MinHeap {
     private downHeap(idx: number): void {
         const leftIdx = this.leftIdx(idx);
         const rightIdx = this.rightIdx(idx);
+        let smallest = idx;
 
-        if (idx > this.length || leftIdx >= this.length) {
-            return;
+        if (leftIdx < this.length && this.array[leftIdx] < this.array[idx]) {
+            smallest = leftIdx;
         }
 
-        const leftVal = this.array[leftIdx];
-        let rightVal = this.array[rightIdx];
-
-        if (rightIdx >= this.length) {
-            rightVal = Infinity;
+        if (rightIdx < this.length && this.array[rightIdx] < this.array[smallest]) {
+            smallest = rightIdx;
         }
 
-        if (leftVal > rightVal && rightVal < this.array[idx]) {
-            this.array[rightIdx] = this.array[idx];
-            this.array[idx] = rightVal;
-            this.downHeap(rightIdx);
-        } else if (leftVal < rightVal && leftVal < this.array[idx]) {
-            this.array[leftIdx] = this.array[idx];
-            this.array[idx] = leftVal;
-            this.downHeap(leftIdx);
+        if (smallest !== idx) {
+            const temp = this.array[idx];
+            this.array[idx] = this.array[smallest];
+            this.array[smallest] = temp;
+            this.downHeap(smallest);
         }
+
     }
 
     private upHeap(idx: number): void {

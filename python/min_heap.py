@@ -36,21 +36,17 @@ class MinHeap:
     def down_heap(self, idx: int) -> None:
         left_idx = self.left_idx(idx)
         right_idx = self.right_idx(idx)
+        smallest = idx
 
-        if left_idx >= self.length() - 1 or not self.array[idx]:
-            return
+        if left_idx < self.length() and self.array[left_idx] < self.array[idx]:
+            smallest = left_idx
 
-        left_val = self.array[left_idx]
-        right_val = self.array[right_idx]
+        if right_idx < self.length() and self.array[right_idx] < self.array[smallest]:
+            smallest = right_idx
 
-        if left_val <= right_val and left_val < self.array[idx]:
-            self.array[left_idx] = self.array[idx]
-            self.array[idx] = left_val
-            self.down_heap(left_idx)
-        elif left_val > right_val and right_val < self.array[idx]:
-            self.array[right_idx] = self.array[idx]
-            self.array[idx] = right_val
-            self.down_heap(right_idx)
+        if smallest != idx:
+            self.array[smallest], self.array[idx] = self.array[idx], self.array[smallest]
+            self.down_heap(smallest)
 
     # formula to get parent index
     def parent_idx(self, idx: int) -> int:
