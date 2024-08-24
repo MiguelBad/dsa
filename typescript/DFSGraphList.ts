@@ -1,7 +1,7 @@
 type GraphEdge = {
     to: number;
     weight: number;
-};
+}
 type WeightedAdjacencyList = GraphEdge[][];
 // how weighted adjacency list would look like in this type:
 // -> const graph = [[{ to: 1, weight: 4 }, { to: 2, weight: 3 }], [{ to: 2, weight: 1 }]]
@@ -10,30 +10,32 @@ type WeightedAdjacencyList = GraphEdge[][];
 
 function walk(
     graph: WeightedAdjacencyList,
-    needle: number,
     curr: number,
-    path: number[],
-    seen: boolean[]): boolean {
+    needle: number,
+    seen: boolean[],
+    path: number[]): boolean {
 
     if (seen[curr]) {
         return false;
     }
 
     seen[curr] = true;
-    path.push(curr);
+    path.push(curr); 
     if (curr === needle) {
         return true;
     }
 
-    for (let i = 0; i < graph[curr].length; i++) {
-        const edge = graph[curr][i]
-        if (walk(graph, needle, edge.to, path, seen)) {
+    const list = graph[curr];
+    for (let i = 0; i < list.length; i++) {
+        const edge = list[i];
+        if (walk(graph, edge.to, needle, seen, path)) {
             return true;
         }
     }
 
     path.pop();
     return false;
+
 }
 
 function DFSGraphList(
@@ -42,12 +44,11 @@ function DFSGraphList(
     needle: number): number[] {
 
     const seen: boolean[] = new Array(graph.length).fill(false);
-    const path: number[] = []
+    const path: number[] = [];
 
-    walk(graph, needle, source, path,  seen) 
+    walk(graph, source, needle, seen, path);
 
     return path;
-
 }
 
 function main() {
@@ -66,7 +67,8 @@ function main() {
         [
             { to: 0, weight: 4 }
         ]
-    ];
+    ]
+
     console.log(DFSGraphList(graph, 0, 3));
 }
 
