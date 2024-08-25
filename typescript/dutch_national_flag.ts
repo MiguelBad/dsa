@@ -3,20 +3,16 @@ function sort(arr: number[]): void {
     let mid: number = 0;
     let high: number = arr.length - 1;
 
-    while (mid < high) {
+    while (mid <= high) {
         if (arr[mid] === 0) {
             const temp = arr[low];
             arr[low] = arr[mid];
             arr[mid] = temp;
             low++;
             mid++;
-        }
-
-        if (arr[mid] === 1) {
+        } else if (arr[mid] === 1) {
             mid++;
-        }
-
-        if (arr[mid] === 2) {
+        } else if (arr[mid] === 2) {
             const temp = arr[mid];
             arr[mid] = arr[high];
             arr[high] = temp;
