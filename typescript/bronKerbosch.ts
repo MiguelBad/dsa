@@ -2,7 +2,7 @@ type Graph = {
     [key: number]: number[];
 }
 
-function bronKerbosch(
+function findClique(
     k: number,
     graph: Graph,
     curr: number[],
@@ -26,7 +26,7 @@ function bronKerbosch(
         const newPotential = new Set([...potential].filter(item => edges.has(item)));
         const newExcluded = new Set([...excluded].filter(item => edges.has(item)));
 
-        if (bronKerbosch(k, graph, newCurr, newPotential, newExcluded)) { 
+        if (findClique(k, graph, newCurr, newPotential, newExcluded)) { 
             return true
         }
 
@@ -37,16 +37,16 @@ function bronKerbosch(
     return false;
 }
 
-function main(k: number, graph: Graph): Boolean {
+function bronKerbosch(): Boolean {
+    const k: number = 3;
+    const graph: Graph = {
+        0: [1, 2],
+        1: [0, 2],
+        2: [0, 1],
+    };
+
     const potential: Set<number> = new Set(Object.keys(graph).map(x => parseInt(x)));
-    return bronKerbosch(k, graph, [], potential, new Set());
+    return findClique(k, graph, [], potential, new Set());
 }
 
-const k: number = 3;
-const graph: Graph = {
-    0: [1, 2],
-    1: [0, 2],
-    2: [0, 1],
-}
-
-console.log(main(k, graph));
+bronKerbosch();
