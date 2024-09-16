@@ -3,10 +3,8 @@ def main(arr):
 
     for i in range(n):
         for j in range(n - i - 1):
-            if i > j:
-                temp = arr[i]
-                arr[i] = arr[j]
-                arr[j + 1] = temp
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
     print(arr)
 
 
