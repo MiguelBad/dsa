@@ -1,39 +1,61 @@
 package main
 
-type IntOrString interface {
-	int | string
+import "fmt"
+
+type Node struct {
+	item int
+	next *Node
 }
 
-type Node[T IntOrString] struct {
-	item T
-	next *Node[T]
-	prev *Node[T]
-}
-
-type Queue[T IntOrString] struct {
-	head   *Node[T]
-	tail   *Node[T]
+type Queue struct {
+	head   *Node
+	tail   *Node
 	length int
 }
 
-func (q *Queue[T]) enqueue(item T) {
-	newNode := Node[T]{item: item}
+func (q *Queue) Enqueue(item int) {
+	newNode := &Node{item: item}
+	q.length++
 
 	if q.length == 0 {
-		q.head = &newNode
-		q.tail = &newNode
-
+		q.head = newNode
+		q.tail = newNode
+		return
 	}
+
+	q.tail.next = newNode
+	q.tail = newNode
 }
 
-func (q *Queue[T]) deque() {
+func (q *Queue) Deque() int {
+	if q.length == 0 {
+		fmt.Println("Queue is empty!")
+		return 0
+	}
+
+	q.length--
+	item := q.head.item
+
+	if q.length == 0 {
+		q.head = nil
+		q.tail = nil
+	} else {
+		q.head = q.head.next
+	}
+
+	return item
 }
 
-func (q *Queue[T]) is_empty() bool {
+func (q *Queue) IsEmpty() bool {
 	return q.length == 0
 }
 
-func (q *Queue[T]) peek() T {
+func (q *Queue) Peek() int {
+	if q.length == 0 {
+		fmt.Println("Queue is empty!")
+		return 0
+	}
+
 	return q.head.item
 }
 
