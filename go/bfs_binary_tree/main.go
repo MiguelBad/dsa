@@ -18,15 +18,15 @@ type Queue struct {
 }
 
 func (q *Queue) enqueue(item create_binary_tree.Node) {
-	newNode := Node{item: item}
+	newNode := &Node{item: item}
 	q.length++
 
 	if q.length == 1 {
-		q.head = &newNode
-		q.tail = &newNode
+		q.head = newNode
+		q.tail = newNode
 	} else {
-		q.tail.next = &newNode
-		q.tail = &newNode
+		q.tail.next = newNode
+		q.tail = newNode
 	}
 }
 
