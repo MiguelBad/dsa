@@ -3,62 +3,62 @@ package main
 import "fmt"
 
 type Node struct {
-	item int
-	next *Node
+	Item int
+	Next *Node
 }
 
 type Queue struct {
-	head   *Node
-	tail   *Node
-	length int
+	Head   *Node
+	Tail   *Node
+	Length int
 }
 
 func (q *Queue) Enqueue(item int) {
-	newNode := &Node{item: item}
-	q.length++
+	newNode := &Node{Item: item}
+	q.Length++
 
-	if q.length == 1 {
-		q.head = newNode
-		q.tail = newNode
+	if q.Length == 1 {
+		q.Head = newNode
+		q.Tail = newNode
 	} else {
-		q.tail.next = newNode
-		q.tail = newNode
+		q.Tail.Next = newNode
+		q.Tail = newNode
 	}
 }
 
 func (q *Queue) Deque() int {
-	if q.length == 0 {
+	if q.Length == 0 {
 		fmt.Println("Queue is empty!")
 		return 0
 	}
 
-	q.length--
-	item := q.head.item
+	q.Length--
+	item := q.Head.Item
 
-	if q.length == 0 {
-		q.head = nil
-		q.tail = nil
+	if q.Length == 0 {
+		q.Head = nil
+		q.Tail = nil
 	} else {
-		q.head = q.head.next
+		q.Head = q.Head.Next
 	}
 
 	return item
 }
 
 func (q *Queue) Peek() int {
-	if q.length == 0 {
+	if q.Length == 0 {
 		fmt.Println("Queue is empty!")
 		return 0
 	}
 
-	return q.head.item
+	return q.Head.Item
 }
 
 func seeVal(q Queue) {
-	fmt.Println("Length:", q.length)
-	fmt.Println("Head Item", q.head.item)
+	fmt.Println("Length:", q.Length)
+	fmt.Println("Head Item", q.Head.Item)
 	fmt.Println("Peek:", q.Peek())
-	fmt.Println("Tail Item", q.tail.item)
+	fmt.Println("Tail Item", q.Tail.Item)
 	fmt.Println()
 }
 
@@ -81,5 +81,5 @@ func main() {
 	q.Deque()
 	seeVal(*q)
 	q.Deque()
-    fmt.Println(q.length)
+	fmt.Println(q.Length)
 }
