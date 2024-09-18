@@ -17,14 +17,13 @@ func (q *Queue) Enqueue(item int) {
 	newNode := &Node{item: item}
 	q.length++
 
-	if q.length == 0 {
+	if q.length == 1 {
 		q.head = newNode
 		q.tail = newNode
-		return
+	} else {
+		q.tail.next = newNode
+		q.tail = newNode
 	}
-
-	q.tail.next = newNode
-	q.tail = newNode
 }
 
 func (q *Queue) Deque() int {
@@ -46,10 +45,6 @@ func (q *Queue) Deque() int {
 	return item
 }
 
-func (q *Queue) IsEmpty() bool {
-	return q.length == 0
-}
-
 func (q *Queue) Peek() int {
 	if q.length == 0 {
 		fmt.Println("Queue is empty!")
@@ -59,5 +54,32 @@ func (q *Queue) Peek() int {
 	return q.head.item
 }
 
+func seeVal(q Queue) {
+	fmt.Println("Length:", q.length)
+	fmt.Println("Head Item", q.head.item)
+	fmt.Println("Peek:", q.Peek())
+	fmt.Println("Tail Item", q.tail.item)
+	fmt.Println()
+}
+
 func main() {
+	q := &Queue{}
+
+	q.Enqueue(4)
+	seeVal(*q)
+	q.Enqueue(2)
+	seeVal(*q)
+	q.Enqueue(9)
+	seeVal(*q)
+	q.Enqueue(10)
+	seeVal(*q)
+
+	q.Deque()
+	seeVal(*q)
+	q.Deque()
+	seeVal(*q)
+	q.Deque()
+	seeVal(*q)
+	q.Deque()
+    fmt.Println(q.length)
 }
