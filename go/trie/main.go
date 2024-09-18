@@ -18,6 +18,16 @@ type DataType struct {
 	Completed    bool    `json:"completed"`
 }
 
+type TrieNode struct {
+	letter rune
+	isWord bool
+	child  *TrieNode
+}
+
+type TrieTree struct {
+    root [26]string
+}
+
 var Data []DataType
 
 func readJson() {
@@ -32,9 +42,18 @@ func readJson() {
 	}
 }
 
-func insertData() {
+func insertData(root *TrieTree) {
+	for _, phrase := range Data {
+		if phrase.English != nil {
+			engList := []rune(*phrase.English)
+
+		}
+	}
 }
 
 func main() {
 	readJson()
+
+	root := &TrieTree{}
+	insertData(root)
 }
