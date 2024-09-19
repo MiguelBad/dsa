@@ -4,18 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
-type DataType struct {
-	ID           int     `json:"id"`
-	English      *string `json:"English"`
-	GlossEnglish *string `json:"Gloss (english)"`
-	GlossDharug  *string `json:"Dharug(Gloss)"`
-	Dharug       *string `json:"Dharug"`
-	Topic        *string `json:"Topic"`
-	ImageName    *string `json:"Image Name (optional)"`
-	Recording    *string `json:"recording"`
-	Completed    bool    `json:"completed"`
+type LanguageData struct {
+	Id          int     `json:"id"`
+	English     *string `json:"English"`
+	EnlighGloss *string `json:"Gloss (english)"`
+	DharugGloss *string `json:"Dharug(Gloss)"`
+	Dharug      *string `json:"Dharug"`
+	Topic       *string `json:"Topic"`
+	ImageName   *string `json:"Image Name (optional)"`
+	Recording   *string `json:"recording"`
+	Completed   bool    `json:"completed"`
 }
 
 type TrieNode struct {
@@ -23,17 +24,18 @@ type TrieNode struct {
 	isWord   bool
 }
 
-type TrieTree struct {
+type Trie struct {
 	root *TrieNode
 }
 
-func readJson() []DataType {
+func ReadJson() []LanguageData {
+	var data []LanguageData
+
 	file, err := os.ReadFile("data.json")
 	if err != nil {
-		panic(fmt.Sprintf("Error opening json file\n%v\n", err))
+		panic(fmt.Sprintf("Error reading json file\n%v\n", err))
 	}
 
-	var data []DataType
 	err = json.Unmarshal(file, &data)
 	if err != nil {
 		panic(fmt.Sprintf("Error decoding json file\n%v\n", err))
@@ -42,18 +44,28 @@ func readJson() []DataType {
 	return data
 }
 
-func (t *TrieTree) Insert(phrase string) {
+func CreateNode() *TrieNode {
+	return &TrieNode{
+		children: make(map[rune]*TrieNode),
+		isWord:   false,
+	}
+}
+
+func CreateTrie() *Trie {
+	return &Trie{
+		root: &TrieNode{
+			children: make(map[rune]*TrieNode),
+			isWord:   false,
+		},
+	}
+}
+
+func (t *Trie) Insert(phrase string) {
 	node := t.root
 
-	test := &TrieNode{children: make(map[rune]*TrieNode), isWord: false}
-	node.children[200] = test
-
-	for _, char := range phrase {
+	for _, char := range strings.ToLower(phrase) {
 		if _, ok := node.children[char]; !ok {
-			node.children[char] = &TrieNode{
-				children: make(map[rune]*TrieNode),
-				isWord:   false,
-			}
+			node.children[char] = CreateNode()
 		}
 
 		node = node.children[char]
@@ -62,43 +74,85 @@ func (t *TrieTree) Insert(phrase string) {
 	node.isWord = true
 }
 
-func (t *TrieTree) Search(phrase string) bool {
+func (t *Trie) Search(searchPhrase string) bool {
 	node := t.root
 
-	for _, char := range phrase {
+	for _, char := range strings.ToLower(searchPhrase) {
 		if _, ok := node.children[char]; !ok {
 			return false
 		}
 
-        node = node.children[char]
-        fmt.Println(string(char))
+		node = node.children[char]
 	}
 
-    return node.isWord
+	return node.isWord
+}
+
+func (t *Trie) checkChild(node *TrieNode, prefix []rune, potential *[]string) {
+    if potential != nil {
+        if len(*potential) == 5 {
+            return
+        }
+    }
+
+	if node.isWord {
+		*potential = append(*potential, string(prefix))
+	}
+
+	for char, child := range node.children {
+		t.checkChild(child, append(prefix, char), potential)
+	}
+}
+
+func (t *Trie) PrefixOf(searchPrefix string) []string {
+	var potential []string
+	var prefix []rune
+	node := t.root
+
+	for _, char := range strings.ToLower(searchPrefix) {
+		prefix = append(prefix, char)
+
+		if _, ok := node.children[char]; !ok {
+			return []string{}
+		}
+
+		node = node.children[char]
+	}
+
+	t.checkChild(node, prefix, &potential)
+
+	for _, p := range potential {
+		fmt.Println(p)
+	}
+
+	return potential
 }
 
 func main() {
-	trie := &TrieTree{root: &TrieNode{children: make(map[rune]*TrieNode), isWord: false}}
-	data := readJson()
+	trie := CreateTrie()
+	data := ReadJson()
 
 	for _, phrase := range data {
+		if phrase.Topic != nil {
+			trie.Insert(*phrase.Topic)
+		}
+
 		if phrase.English != nil {
 			trie.Insert(*phrase.English)
+		}
+
+		if phrase.EnlighGloss != nil {
+			trie.Insert(*phrase.EnlighGloss)
 		}
 
 		if phrase.Dharug != nil {
 			trie.Insert(*phrase.Dharug)
 		}
 
-		if phrase.GlossEnglish != nil {
-			trie.Insert(*phrase.GlossEnglish)
-		}
-
-		if phrase.GlossDharug != nil {
-			trie.Insert(*phrase.GlossDharug)
+		if phrase.DharugGloss != nil {
+			trie.Insert(*phrase.DharugGloss)
 		}
 	}
 
-    fmt.Println(trie.Search("you"))
-
+	trie.PrefixOf("you")
 }
