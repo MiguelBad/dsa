@@ -14,6 +14,12 @@ type BinarySearchTree struct {
 	root *BSTNode
 }
 
+func newBinarySearchTree() *BinarySearchTree {
+	return &BinarySearchTree{
+		root: nil,
+	}
+}
+
 func (BST *BinarySearchTree) insert(item int) {
 	curr := BST.root
 	new_node := BSTNode{item: &item}
@@ -56,7 +62,18 @@ func (BST *BinarySearchTree) inOrder() {
 }
 
 func (BST *BinarySearchTree) _dfs(curr *BSTNode, path []int) {
+	BST._dfs(curr.left, path)
+	path = append(path, *curr.item)
+	BST._dfs(curr.right, path)
 }
 
 func main() {
+	var bst = newBinarySearchTree()
+
+	items := []int{5, 1, 6, 2, 3}
+	for i := range items {
+		bst.insert(i)
+	}
+
+	bst.inOrder()
 }
