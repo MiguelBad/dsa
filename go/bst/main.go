@@ -1,79 +1,99 @@
 package main
 
-import "fmt"
-
-// "fmt"
+import (
+	"fmt"
+)
 
 type BSTNode struct {
-	item  *int
+	item  int
 	left  *BSTNode
 	right *BSTNode
 }
 
-type BinarySearchTree struct {
+func createBSTNode(item int) *BSTNode {
+	return &BSTNode{
+		item:  item,
+		left:  nil,
+		right: nil,
+	}
+}
+
+type BST struct {
 	root *BSTNode
 }
 
-func newBinarySearchTree() *BinarySearchTree {
-	return &BinarySearchTree{
-		root: nil,
-	}
-}
+func (b *BST) insert(item int) {
+	new_node := createBSTNode(item)
 
-func (BST *BinarySearchTree) insert(item int) {
-	curr := BST.root
-	new_node := BSTNode{item: &item}
-
-	if curr.item == nil {
-		BST.root = &new_node
+	if b.root == nil {
+		b.root = new_node
 		return
 	}
 
+	curr := b.root
 	for curr != nil {
-		if *curr.item > item {
-			if curr.right == nil {
-				curr.right = &new_node
-				return
-			}
-			curr = curr.right
-		} else {
+		if curr.item > item {
 			if curr.left == nil {
-				curr.left = &new_node
+				curr.left = new_node
 				return
 			}
 			curr = curr.left
+		} else {
+			if curr.right == nil {
+				curr.right = new_node
+				return
+			}
+			curr = curr.right
+		}
+	}
+}
+
+func (b *BST) delete() {
+}
+
+func (b *BST) search(item int) bool {
+	curr := b.root
+	if curr.item == item {
+		return true
+	}
+
+	for curr != nil {
+		if curr.item == item {
+			return true
+		}
+
+		if curr.item > item {
+			curr = curr.left
+		} else {
+			curr = curr.right
 		}
 	}
 
+	return false
 }
 
-func (BST *BinarySearchTree) delete() {
+func (b *BST) inOrder() {
+	path := []int{}
+	_bfs(b.root, &path)
+	fmt.Println(path)
 }
 
-func (BST *BinarySearchTree) search() {
-}
+func _bfs(curr *BSTNode, path *[]int) {
+	if curr == nil {
+		return
+	}
 
-func (BST *BinarySearchTree) inOrder() {
-	curr := BST.root
-	var path = []int{}
-
-	BST._dfs(curr, path)
-	fmt.Printf("In order path: %v", path)
-}
-
-func (BST *BinarySearchTree) _dfs(curr *BSTNode, path []int) {
-	BST._dfs(curr.left, path)
-	path = append(path, *curr.item)
-	BST._dfs(curr.right, path)
+	_bfs(curr.left, path)
+	*path = append(*path, curr.item)
+	_bfs(curr.right, path)
 }
 
 func main() {
-	var bst = newBinarySearchTree()
-
-	items := []int{5, 1, 6, 2, 3}
-	for i := range items {
+	var bst = &BST{}
+	for _, i := range []int{3, 5, 1, 10, 5, 2} {
 		bst.insert(i)
 	}
 
 	bst.inOrder()
+	fmt.Println(bst.search(9))
 }
