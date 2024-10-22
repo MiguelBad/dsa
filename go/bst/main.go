@@ -10,41 +10,36 @@ type BSTNode struct {
 	right *BSTNode
 }
 
-func createBSTNode(item int) *BSTNode {
-	return &BSTNode{
-		item:  item,
-		left:  nil,
-		right: nil,
-	}
-}
-
 type BST struct {
 	root *BSTNode
 }
 
 func (b *BST) insert(item int) {
-	new_node := createBSTNode(item)
-
-	if b.root == nil {
-		b.root = new_node
-		return
+	fmt.Println("Inserting:", item)
+	newNode := &BSTNode{
+		item:  item,
+		left:  nil,
+		right: nil,
 	}
 
 	curr := b.root
+	if curr == nil {
+		b.root = newNode
+	}
+
 	for curr != nil {
 		if curr.item == item {
+			fmt.Println("Item already exists")
 			return
-		}
-
-		if curr.item > item {
+		} else if curr.item > item {
 			if curr.left == nil {
-				curr.left = new_node
+				curr.left = newNode
 				return
 			}
 			curr = curr.left
 		} else {
 			if curr.right == nil {
-				curr.right = new_node
+				curr.right = newNode
 				return
 			}
 			curr = curr.right
@@ -52,9 +47,9 @@ func (b *BST) insert(item int) {
 	}
 }
 
-func (b *BST) delete(item int) int {
+func (b *BST) delete(item int) {
+	fmt.Println("Deleting:", item)
 	b.root = _deleteHelper(b.root, item)
-	return item
 }
 
 func _deleteHelper(curr *BSTNode, item int) *BSTNode {
@@ -69,11 +64,11 @@ func _deleteHelper(curr *BSTNode, item int) *BSTNode {
 			return curr.right
 		} else if curr.right == nil {
 			return curr.left
+		} else {
+			successor := _findSuccessor(curr.right)
+			curr.item = successor.item
+			curr.right = _deleteHelper(curr.right, successor.item)
 		}
-
-		successor := _findSuccessor(curr.right)
-		curr.item = successor.item
-		curr.right = _deleteHelper(curr.right, successor.item)
 	}
 	return curr
 }
@@ -86,6 +81,7 @@ func _findSuccessor(curr *BSTNode) *BSTNode {
 }
 
 func (b *BST) search(item int) bool {
+	fmt.Println("Searching", item)
 	curr := b.root
 	for curr != nil {
 		if curr.item == item {
@@ -96,38 +92,36 @@ func (b *BST) search(item int) bool {
 			curr = curr.right
 		}
 	}
-
 	return false
 }
 
 func (b *BST) inOrder() {
 	path := []int{}
-	_bfs(b.root, &path)
+	_inOrderHelper(b.root, &path)
 	fmt.Println(path)
 }
 
-func _bfs(curr *BSTNode, path *[]int) {
+func _inOrderHelper(curr *BSTNode, path *[]int) {
 	if curr == nil {
 		return
 	}
 
-	_bfs(curr.left, path)
+	_inOrderHelper(curr.left, path)
 	*path = append(*path, curr.item)
-	_bfs(curr.right, path)
+	_inOrderHelper(curr.right, path)
 }
 
 func main() {
-	var bst = &BST{}
+	bst := &BST{}
+
 	for _, i := range []int{3, 5, 1, 10, 5, 2, 4, 1, 35, 6, 10, 3} {
-		fmt.Printf("Inserting %v\n", i)
 		bst.insert(i)
+		bst.inOrder()
 	}
 
-	bst.inOrder()
 	fmt.Println(bst.search(1))
 
 	for _, i := range []int{3, 5, 1, 10, 2, 4, 35, 6} {
-		fmt.Printf("Deleting %v\n", i)
 		bst.delete(i)
 		bst.inOrder()
 	}
