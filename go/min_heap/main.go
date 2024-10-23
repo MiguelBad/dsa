@@ -11,8 +11,23 @@ type MinHeap struct {
 
 func (h *MinHeap) insert(item int) {
 	h.arr = append(h.arr, item)
-	h.heapifyUp(h.length)
 	h.length++
+	_heapifyUp(h.length-1, h.arr)
+}
+
+func _heapifyUp(currIdx int, arr []int) {
+	if currIdx < 1 {
+		return
+	}
+
+	parentIdx := _getParentIdx(currIdx)
+
+	if arr[parentIdx] > arr[currIdx] {
+		arr[parentIdx], arr[currIdx] = arr[currIdx], arr[parentIdx]
+		_heapifyUp(parentIdx, arr)
+	} else {
+		return
+	}
 }
 
 func (h *MinHeap) extractMin() *int {
@@ -21,52 +36,29 @@ func (h *MinHeap) extractMin() *int {
 		return nil
 	}
 
-	item, arr := h.arr[0], h.arr[1:]
-	if arr[0] > arr[1] {
-		arr[1], arr[0] = arr[0], arr[1]
-	}
-
-	h.arr = arr
 	h.length--
+	h.arr[h.length], h.arr[0] = h.arr[0], h.arr[h.length]
+	item := h.arr[h.length]
+	h.arr = h.arr[:h.length]
+	_heapifyDown(0, h.arr)
 	return &item
 }
 
-func (h *MinHeap) delete(item int) *int {
-	if h.length == 0 {
-		fmt.Println("Heap is empty")
-		return nil
+func _heapifyDown(currIdx int, arr []int) {
+	leftIdx, rightIdx := _getLeftIdx(currIdx), _getRightIdx(currIdx)
+	smallest := currIdx
+
+	if leftIdx < len(arr)-1 && arr[leftIdx] < arr[smallest] {
+		smallest = leftIdx
 	}
 
-	currIdx := 0
-	for currIdx < h.length {
-		leftIdx, righIdx := _getLeftIdx(currIdx), _getRightIdx(currIdx)
-
-		if h.arr[currIdx] == item {
-			item, arr := h.arr[currIdx], h.arr[currIdx:]
-		}
-
-		if h.arr[currIdx] > item {
-			currIdx = leftIdx
-		} else {
-			currIdx = righIdx
-		}
+	if rightIdx < len(arr)-1 && arr[rightIdx] < arr[smallest] {
+		smallest = rightIdx
 	}
 
-	h.length--
-	return
-}
-
-func deleteHelper() {
-}
-
-func (h *MinHeap) heapifyUp(currIdx int) {
-	parentIdx := _getParentIdx(currIdx)
-
-	if h.arr[parentIdx] > h.arr[currIdx] {
-		h.arr[parentIdx], h.arr[currIdx] = h.arr[currIdx], h.arr[parentIdx]
-		h.heapifyUp(parentIdx)
-	} else {
-		return
+	if smallest != currIdx {
+		arr[smallest], arr[currIdx] = arr[currIdx], arr[smallest]
+		_heapifyDown(smallest, arr)
 	}
 }
 
@@ -94,9 +86,9 @@ func main() {
 	heap.insert(1)
 	heap.insert(3)
 	heap.insert(0)
-	heap.insert(3)
-	heap.insert(3)
-	heap.insert(3)
+	heap.insert(1)
+	heap.insert(4)
+	heap.insert(2)
 
 	fmt.Println(heap.arr)
 	heap.extractMin()
@@ -104,14 +96,5 @@ func main() {
 	heap.extractMin()
 	fmt.Println(heap.arr)
 	heap.extractMin()
-	fmt.Println(heap.arr)
-	heap.extractMin()
-	fmt.Println(heap.arr)
-	heap.extractMin()
-	fmt.Println(heap.arr)
-	heap.extractMin()
-	fmt.Println(heap.arr)
-	heap.extractMin()
-
 	fmt.Println(heap.arr)
 }
