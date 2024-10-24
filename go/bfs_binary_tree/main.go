@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"dsa/dsa/create_binary_tree"
+	"dsa/dsa/createBT"
 )
 
 type Node struct {
-	item create_binary_tree.Node
+	item createBT.Node
 	next *Node
 }
 
@@ -17,7 +17,7 @@ type Queue struct {
 	length int
 }
 
-func (q *Queue) enqueue(item create_binary_tree.Node) {
+func (q *Queue) enqueue(item createBT.Node) {
 	newNode := &Node{item: item}
 	q.length++
 
@@ -30,7 +30,7 @@ func (q *Queue) enqueue(item create_binary_tree.Node) {
 	}
 }
 
-func (q *Queue) deque() create_binary_tree.Node {
+func (q *Queue) deque() createBT.Node {
 	item := q.head.item
 	q.length--
 
@@ -44,7 +44,7 @@ func (q *Queue) deque() create_binary_tree.Node {
 	return item
 }
 
-func bfs_binary_tree(tree *create_binary_tree.Node, path []int) []int {
+func bfs_binary_tree(tree *createBT.Node, path []int) []int {
 	q := &Queue{}
 	q.enqueue(*tree)
 
@@ -66,7 +66,7 @@ func bfs_binary_tree(tree *create_binary_tree.Node, path []int) []int {
 }
 
 func main() {
-	var tree = create_binary_tree.CreateTree()
+	var tree = createBT.CreateTree()
 	path := bfs_binary_tree(tree, []int{})
 	fmt.Println("Tree structure:", path)
 }

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"dsa/dsa/create_binary_tree"
+	"dsa/dsa/createBT"
 	"fmt"
 )
 
-var tree = create_binary_tree.CreateTree()
+var tree = createBT.CreateTree()
 
-func dfsPreorder(path []int, needle int, curr *create_binary_tree.Node) ([]int, bool) {
+func dfsPreorder(path []int, needle int, curr *createBT.Node) ([]int, bool) {
 	if curr == nil {
 		return path, false
 	}
@@ -24,7 +24,7 @@ func dfsPreorder(path []int, needle int, curr *create_binary_tree.Node) ([]int, 
 	return dfsPreorder(path, needle, curr.Right)
 }
 
-func dfsInorder(path []int, needle int, curr *create_binary_tree.Node) ([]int, bool) {
+func dfsInorder(path []int, needle int, curr *createBT.Node) ([]int, bool) {
 	var found bool
 
 	if curr == nil {
@@ -43,7 +43,7 @@ func dfsInorder(path []int, needle int, curr *create_binary_tree.Node) ([]int, b
 	return dfsInorder(path, needle, curr.Right)
 }
 
-func dfsPostorder(path []int, needle int, curr *create_binary_tree.Node) ([]int, bool) {
+func dfsPostorder(path []int, needle int, curr *createBT.Node) ([]int, bool) {
 	var found bool
 
 	if curr == nil {
