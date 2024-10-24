@@ -131,13 +131,13 @@ func main() {
 	intList.insert(10, 5)
 	intList.displayList()
 
-	for range [4]int{} {
+	for i := 0; i < 4; i++ {
 		intList.deleteHead()
 		intList.displayList()
 	}
 
 	intList.delete(10)
-    intList.displayList()
+	intList.displayList()
 
 	// stringList := &LinkedList[string]{
 	// 	head:   nil,
