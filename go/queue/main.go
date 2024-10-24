@@ -2,84 +2,84 @@ package main
 
 import "fmt"
 
-type Node struct {
-	Item int
-	Next *Node
+type Value interface {
+	string | int
 }
 
-type Queue struct {
-	Head   *Node
-	Tail   *Node
-	Length int
+type Node[T Value] struct {
+	item T
+	next *Node[T]
 }
 
-func (q *Queue) Enqueue(item int) {
-	newNode := &Node{Item: item}
-	q.Length++
+type Queue[T Value] struct {
+	head   *Node[T]
+	tail   *Node[T]
+	length int
+}
 
-	if q.Length == 1 {
-		q.Head = newNode
-		q.Tail = newNode
+func (q *Queue[T]) enqueue(item T) {
+	newNode := &Node[T]{
+		item: item,
+		next: nil,
+	}
+
+	if q.length == 0 {
+		q.head = newNode
+		q.tail = newNode
 	} else {
-		q.Tail.Next = newNode
-		q.Tail = newNode
+		q.tail.next = newNode
+		q.tail = newNode
 	}
+
+	q.length++
 }
 
-func (q *Queue) Deque() int {
-	if q.Length == 0 {
-		fmt.Println("Queue is empty!")
-		return 0
+func (q *Queue[T]) deque() *T {
+	if q.length == 0 {
+		return nil
 	}
 
-	q.Length--
-	item := q.Head.Item
-
-	if q.Length == 0 {
-		q.Head = nil
-		q.Tail = nil
+	item := q.head.item
+	if q.length == 1 {
+		q.head = nil
+		q.tail = nil
 	} else {
-		q.Head = q.Head.Next
+		q.head = q.head.next
 	}
 
-	return item
+	return &item
 }
 
-func (q *Queue) Peek() int {
-	if q.Length == 0 {
-		fmt.Println("Queue is empty!")
-		return 0
+func (q *Queue[T]) peek() *T {
+	if q.length == 0 {
+		return nil
 	}
 
-	return q.Head.Item
+	return &q.head.item
 }
 
-func seeVal(q Queue) {
-	fmt.Println("Length:", q.Length)
-	fmt.Println("Head Item", q.Head.Item)
-	fmt.Println("Peek:", q.Peek())
-	fmt.Println("Tail Item", q.Tail.Item)
+func (q *Queue[T]) displayQueue() {
+	curr := q.head
+	for curr != nil {
+		fmt.Print(curr.item, " - ")
+		curr = curr.next
+	}
 	fmt.Println()
 }
 
 func main() {
-	q := &Queue{}
+	queue := &Queue[int]{}
 
-	q.Enqueue(4)
-	seeVal(*q)
-	q.Enqueue(2)
-	seeVal(*q)
-	q.Enqueue(9)
-	seeVal(*q)
-	q.Enqueue(10)
-	seeVal(*q)
+	for i := 0; i < 5; i++ {
+		queue.enqueue(i)
+		queue.displayQueue()
+	}
 
-	q.Deque()
-	seeVal(*q)
-	q.Deque()
-	seeVal(*q)
-	q.Deque()
-	seeVal(*q)
-	q.Deque()
-	fmt.Println(q.Length)
+	currHead := *queue.peek()
+	fmt.Println(currHead)
+
+	for i := 0; i < 5; i++ {
+		queue.deque()
+		queue.displayQueue()
+	}
 }

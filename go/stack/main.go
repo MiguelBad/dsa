@@ -48,8 +48,11 @@ func (s *Stack[T]) pop() *T {
 	return &item
 }
 
-func (s *Stack[T]) peek() T {
-	return s.head.item
+func (s *Stack[T]) peek() *T {
+	if s.length == 0 {
+		return nil
+	}
+	return &s.head.item
 }
 
 func (s *Stack[T]) displayStack() {
@@ -73,7 +76,7 @@ func main() {
 		stack.displayStack()
 	}
 
-	currHead := stack.peek()
+	currHead := *stack.peek()
 	fmt.Println(currHead)
 
 	for i := 0; i < 5; i++ {
