@@ -2,66 +2,82 @@ package main
 
 import "fmt"
 
-type Node struct {
-	item int
-	next *Node
+type Value interface {
+	string | int
 }
 
-type Stack struct {
-	head   *Node
+type Node[T Value] struct {
+	item T
+	next *Node[T]
+}
+
+type Stack[T Value] struct {
+	head   *Node[T]
 	length int
 }
 
-func (s *Stack) Push(item int) {
-	newNode := &Node{item: item}
-	s.length++
+func (s *Stack[T]) push(item T) {
+	newNode := &Node[T]{
+		item: item,
+		next: nil,
+	}
 
-	if s.length == 1 {
+	if s.length == 0 {
 		s.head = newNode
 	} else {
 		newNode.next = s.head
 		s.head = newNode
 	}
+
+	s.length++
 }
 
-func (s *Stack) Pop() int {
+func (s *Stack[T]) pop() *T {
 	if s.length == 0 {
-		fmt.Println("Stack is empty")
-		return 0
+		return nil
 	}
 
 	item := s.head.item
-	s.length--
-
-	if s.length == 0 {
+	if s.length == 1 {
 		s.head = nil
 	} else {
 		s.head = s.head.next
 	}
 
-	return item
+	s.length--
+	return &item
 }
 
-func (s *Stack) Peek() int {
-	if s.length == 0 {
-		fmt.Println("Stack is empty")
-		return 0
-	}
-
+func (s *Stack[T]) peek() T {
 	return s.head.item
 }
 
+func (s *Stack[T]) displayStack() {
+	curr := s.head
+	for curr != nil {
+		fmt.Print(curr.item, " - ")
+		curr = curr.next
+	}
+
+	fmt.Println()
+}
+
 func main() {
-	s := &Stack{}
+	stack := &Stack[int]{
+		head:   nil,
+		length: 0,
+	}
 
-	s.Push(1)
-	s.Push(2)
-	s.Push(3)
+	for i := 0; i < 5; i++ {
+		stack.push(i)
+		stack.displayStack()
+	}
 
-	fmt.Println(s.Peek())
+	currHead := stack.peek()
+	fmt.Println(currHead)
 
-	fmt.Println(s.Pop())
-	fmt.Println(s.Pop())
-	fmt.Println(s.Pop())
-	fmt.Println(s.Pop())
+	for i := 0; i < 5; i++ {
+		stack.pop()
+		stack.displayStack()
+	}
 }
