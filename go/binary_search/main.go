@@ -7,30 +7,36 @@ func binarySearch(arr []int, needle int) int {
 	high := len(arr) - 1
 
 	for low <= high {
-		mid := low + (high-low)/2
+		middle := (high-low)/2 + low
 
-		if arr[mid] == needle {
-			return mid
-		} else if arr[mid] > needle {
-			high = mid - 1
+		if arr[middle] == needle {
+			return middle
+		} else if arr[middle] > needle {
+			high = middle - 1
 		} else {
-			low = mid + 1
+			low = middle + 1
 		}
 	}
 
 	return -1
 }
 
-func main() {
-	arr := []int{1, 5, 12, 16, 20, 24, 38, 40, 48}
-
-	for _, needle := range []int{5, 1, 33, 48} {
-		idx := binarySearch(arr, needle)
-
-		if idx == -1 {
-			fmt.Printf("Number: %d\nNot found\n\n", needle)
-		} else {
-			fmt.Printf("Number: %d\nAt index: %d\n\n", needle, idx)
-		}
+func printResult(idx int, needle int) {
+	if idx == -1 {
+		fmt.Printf("%d is not found\n", needle)
+	} else {
+		fmt.Printf("%d is found in index %d\n", needle, idx)
 	}
+}
+
+func main() {
+	arr := []int{3, 6, 8, 10, 32, 38}
+
+	needle := 10
+	result := binarySearch(arr, needle)
+	printResult(result, needle)
+
+	needle = 9
+	result = binarySearch(arr, needle)
+	printResult(result, needle)
 }
