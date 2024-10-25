@@ -1,19 +1,4 @@
 def sortByColours(arr: list[int]) -> None:
-    """
-    Sorts a list of integers representing a colour.
-        - 0 == black
-        - 1 == red
-        - 2 == yellow
-
-    This sort only itterates over the array once, moving number 0 to the front part
-    of the array and move the number 2 to the end part of the array. This gives
-    the sort a time complexity of O(n).
-
-    Assumptions:
-    - The input list contains only integers 0, 1, and 2.
-
-    """
-
     low, mid, high = 0, 0, len(arr) - 1
 
     while mid <= high:
