@@ -22,6 +22,11 @@ type HashMap[K Key] struct {
 	maxLength int
 }
 
+type Entry[K Key] struct {
+	key   K
+	value any
+}
+
 func newHashMap[K Key]() *HashMap[K] {
 	return &HashMap[K]{
 		maxLength: 101,
@@ -37,20 +42,31 @@ func newHashItem[K Key](key K, val any) *HashItem[K] {
 }
 
 func (h *HashMap[K]) set(key K, val any) {
-	item := newHashItem(key, val)
 	idx := h.hashIdx(key)
+	curr := h.table[idx]
 
-	if h.table[idx] == nil {
-		h.table[idx] = item
-	} else {
-		curr := h.table[idx]
-		for curr.next != nil {
-			curr = curr.next
-		}
-		curr.next = item
+	if curr == nil {
+		h.table[idx] = newHashItem(key, val)
+		h.length++
+		return
 	}
 
+	for curr != nil {
+		if curr.key == key {
+			curr.value = val
+			return
+		}
+
+		if curr.next == nil {
+			break
+		}
+
+		curr = curr.next
+	}
+
+	curr.next = newHashItem(key, val)
 	h.length++
+	return
 }
 
 func (h *HashMap[K]) get(key K) any {
@@ -64,6 +80,31 @@ func (h *HashMap[K]) get(key K) any {
 
 	fmt.Printf("%v not found\n", key)
 	return nil
+}
+
+func (h *HashMap[K]) delete(key K) {
+	idx := h.hashIdx(key)
+	curr := h.table[idx]
+
+	if curr != nil && curr.key == key {
+		h.table[idx] = curr.next
+		h.length--
+		return
+	}
+
+	var prev *HashItem[K]
+	for curr != nil {
+		if curr.key == key {
+			prev.next = curr.next
+			h.length--
+			return
+		}
+
+		prev = curr
+		curr = curr.next
+	}
+
+	fmt.Printf("Key <%v> does not exist", key)
 }
 
 func (h *HashMap[K]) hashIdx(key K) int {
@@ -109,12 +150,50 @@ func (h *HashMap[K]) keys() []K {
 	return keys
 }
 
-func (h *HashMap[K]) values(key K, val any) {
+func (h *HashMap[K]) values() []any {
+	values := make([]any, 0, h.length)
+	for _, item := range h.table {
+		for curr := item; curr != nil; curr = curr.next {
+			values = append(values, curr.value)
+		}
+	}
+
+	return values
 }
 
-func (h *HashMap[K]) entries(key K, val any) {
+func (h *HashMap[K]) entries() []Entry[K] {
+	entries := make([]Entry[K], 0, h.length)
+	for _, item := range h.table {
+		for curr := item; curr != nil; curr = curr.next {
+			entries = append(entries, Entry[K]{curr.key, curr.value})
+		}
+	}
+
+	return entries
 }
 
 func main() {
 	hashMap := newHashMap[int]()
+
+	hashMap.set(1, 1)
+	hashMap.set(2, 3)
+	hashMap.set(4, 6)
+	hashMap.set(6, 9)
+	hashMap.set(8, 12)
+	hashMap.set(10, 15)
+
+	fmt.Println(hashMap.entries())
+
+	hashMap.set(1, 3)
+	hashMap.set(2, 5)
+	hashMap.set(4, 8)
+	hashMap.set(6, 11)
+	hashMap.set(8, 14)
+	hashMap.set(10, 17)
+
+	fmt.Println(hashMap.entries())
+
+	hashMap.delete(1)
+
+	fmt.Println(hashMap.entries())
 }
