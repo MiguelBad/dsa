@@ -29,8 +29,8 @@ type Entry[K Key] struct {
 
 func newHashMap[K Key]() *HashMap[K] {
 	return &HashMap[K]{
-		maxLength: 101,
-		table:     make([]*HashItem[K], 101),
+		maxLength: 21,
+		table:     make([]*HashItem[K], 21),
 	}
 }
 
@@ -42,6 +42,11 @@ func newHashItem[K Key](key K, val any) *HashItem[K] {
 }
 
 func (h *HashMap[K]) set(key K, val any) {
+
+	if float64(h.length)/float64(h.maxLength) > 0.7 {
+		h.reHash()
+	}
+
 	idx := h.hashIdx(key)
 	curr := h.table[idx]
 
@@ -137,6 +142,19 @@ func (h *HashMap[K]) hashIdx(key K) int {
 }
 
 func (h *HashMap[K]) reHash() {
+	h.maxLength = h.maxLength*2 + 1
+
+	temp := h.table
+	h.table = make([]*HashItem[K], h.maxLength)
+	h.length = 0
+
+	for _, item := range temp {
+		for curr := item; curr != nil; curr = curr.next {
+			h.set(curr.key, curr.value)
+		}
+	}
+
+	temp = nil
 }
 
 func (h *HashMap[K]) keys() []K {
@@ -181,19 +199,6 @@ func main() {
 	hashMap.set(6, 9)
 	hashMap.set(8, 12)
 	hashMap.set(10, 15)
-
-	fmt.Println(hashMap.entries())
-
-	hashMap.set(1, 3)
-	hashMap.set(2, 5)
-	hashMap.set(4, 8)
-	hashMap.set(6, 11)
-	hashMap.set(8, 14)
-	hashMap.set(10, 17)
-
-	fmt.Println(hashMap.entries())
-
-	hashMap.delete(1)
 
 	fmt.Println(hashMap.entries())
 }
