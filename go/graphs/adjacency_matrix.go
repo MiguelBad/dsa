@@ -1,20 +1,20 @@
 package graphs
 
 type AdjMatrix struct {
-	matrix   [][]int
-	vertices []int
+	Matrix   [][]int
+	Vertices []int
 }
 
 func NewAdjMatrix() *AdjMatrix {
 	adjMatrix := &AdjMatrix{
-		vertices: []int{1, 2, 3, 4, 5, 6},
-		matrix: [][]int{
+		Vertices: []int{0, 1, 2, 3, 4, 5},
+		Matrix: [][]int{
+			{1, 0, 0, 0, 1, 0},
 			{0, 0, 0, 1, 1, 0},
 			{0, 0, 1, 0, 0, 1},
 			{0, 1, 0, 1, 0, 0},
 			{1, 0, 1, 0, 1, 0},
 			{1, 0, 0, 1, 0, 1},
-			{1, 0, 0, 0, 1, 0},
 		},
 	}
 
@@ -30,7 +30,7 @@ func NewAdjMatrix() *AdjMatrix {
 	//  2     5
 	//   \   /
 	//    \ /
-	//     6
+	//     0
 
 	return adjMatrix
 }

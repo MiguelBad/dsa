@@ -1,23 +1,21 @@
 package graphs
 
 type Vertex struct {
-	item int
-	edge []int
+	Item int
+	Edge []int
 }
 
-type AdjList struct {
-	vertices []*Vertex
-}
+type AdjList []*Vertex
 
-func NewAdjList() *AdjList {
-	adjList := &AdjList{}
-
-	adjList.vertices = append(adjList.vertices, &Vertex{item: 1, edge: []int{4, 5}})
-	adjList.vertices = append(adjList.vertices, &Vertex{item: 2, edge: []int{3, 6}})
-	adjList.vertices = append(adjList.vertices, &Vertex{item: 3, edge: []int{2, 4}})
-	adjList.vertices = append(adjList.vertices, &Vertex{item: 4, edge: []int{1, 3, 5}})
-	adjList.vertices = append(adjList.vertices, &Vertex{item: 5, edge: []int{1, 4, 6}})
-	adjList.vertices = append(adjList.vertices, &Vertex{item: 6, edge: []int{2, 5}})
+func NewAdjList() (AdjList, Vertex) {
+	var adjList AdjList = []*Vertex{
+		{Item: 0, Edge: []int{2, 5}},
+		{Item: 1, Edge: []int{4, 5}},
+		{Item: 2, Edge: []int{3, 0}},
+		{Item: 3, Edge: []int{2, 4}},
+		{Item: 4, Edge: []int{1, 3, 5}},
+		{Item: 5, Edge: []int{1, 4, 0}},
+	}
 
 	//        1
 	//        | \
@@ -31,7 +29,7 @@ func NewAdjList() *AdjList {
 	//  2     5
 	//   \   /
 	//    \ /
-	//     6
+	//     0
 
-	return adjList
+	return adjList, *adjList[1]
 }
