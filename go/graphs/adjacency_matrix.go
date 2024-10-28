@@ -5,16 +5,16 @@ type AdjMatrix struct {
 	Vertices []int
 }
 
-func NewAdjMatrix() *AdjMatrix {
-	adjMatrix := &AdjMatrix{
+func NewAdjMatrix() AdjMatrix {
+	adjMatrix := AdjMatrix{
 		Vertices: []int{0, 1, 2, 3, 4, 5},
 		Matrix: [][]int{
-			{1, 0, 0, 0, 1, 0},
-			{0, 0, 0, 1, 1, 0},
 			{0, 0, 1, 0, 0, 1},
-			{0, 1, 0, 1, 0, 0},
-			{1, 0, 1, 0, 1, 0},
-			{1, 0, 0, 1, 0, 1},
+			{0, 0, 0, 0, 1, 1},
+			{1, 0, 0, 1, 0, 0},
+			{0, 0, 1, 0, 1, 0},
+			{0, 1, 0, 1, 0, 1},
+			{1, 1, 0, 0, 1, 0},
 		},
 	}
 

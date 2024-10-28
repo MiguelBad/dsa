@@ -6,7 +6,7 @@ import (
 )
 
 func dfs(adjList graphs.AdjList, needle int, curr graphs.Vertex, path *[]int, seen []bool) bool {
-	if seen[curr.Item] == true {
+	if seen[curr.Item] {
 		return false
 	}
 
@@ -18,7 +18,7 @@ func dfs(adjList graphs.AdjList, needle int, curr graphs.Vertex, path *[]int, se
 	}
 
 	for _, i := range curr.Edge {
-		if dfs(adjList, needle, *adjList[i], path, seen) == true {
+		if dfs(adjList, needle, *adjList[i], path, seen) {
 			return true
 		}
 	}
@@ -40,7 +40,7 @@ func main() {
 
 	found, path := findNeedle(adjList, needle, root)
 
-	if found == true {
+	if found {
 		fmt.Printf("%d found on path:\n%v\n", needle, path)
 	} else {
 		fmt.Printf("Needle not found")
