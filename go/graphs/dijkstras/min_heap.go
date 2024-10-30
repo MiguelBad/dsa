@@ -1,9 +1,7 @@
 package main
 
-import "dsa/dsa/graphs"
-
 type Distances struct {
-	Vertex   *graphs.Vertex
+	Vertex   *Vertex
 	Distance int
 }
 
@@ -11,20 +9,20 @@ type MinHeap struct {
 	elements []*Distances
 }
 
-func distanceNode(item *graphs.Vertex, distance int) *Distances {
+func distanceNode(item *Vertex, distance int) *Distances {
 	return &Distances{
 		Vertex:   item,
 		Distance: distance,
 	}
 }
 
-func (h *MinHeap) insert(item *graphs.Vertex, distance int) {
+func (h *MinHeap) insert(item *Vertex, distance int) {
 	newDistance := distanceNode(item, distance)
 	h.elements = append(h.elements, newDistance)
 	h.heapifyUp(len(h.elements) - 1)
 }
 
-func (h *MinHeap) delete() *graphs.Vertex {
+func (h *MinHeap) delete() *Vertex {
 	if len(h.elements) < 1 {
 		return nil
 	}
