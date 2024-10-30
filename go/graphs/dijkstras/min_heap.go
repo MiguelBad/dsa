@@ -33,7 +33,7 @@ func (h *MinHeap) delete() *graphs.Vertex {
 	if len(h.elements) == 1 {
 		h.elements = h.elements[:0]
 	} else {
-		h.elements[0] = h.elements[len(h.elements)]
+		h.elements[0] = h.elements[len(h.elements)-1]
 		h.elements = h.elements[:len(h.elements)-1]
 		h.heapifyDown(0)
 	}

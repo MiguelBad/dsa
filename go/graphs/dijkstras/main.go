@@ -17,6 +17,7 @@ func dijkstra(graph graphs.AdjList, source graphs.Vertex, end int) []int {
 	}
 
 	heap := &MinHeap{}
+	heap.insert(&source, 0)
 
 	for {
 		break
