@@ -22,20 +22,19 @@ func dijkstra(graph *AdjList, source *Vertex, end int) []int {
 	for len(heap.elements) > 0 {
 		curr := heap.delete()
 
-		for i := 0; i < len(curr.edge); i++ {
-			dist := distances[curr.item] + curr.edge[i].weight
-			if dist < distances[curr.edge[i].to] {
-				distances[curr.edge[i].to] = dist
-				prev[curr.edge[i].to] = curr.item
+		for _, edge := range curr.edge {
+			dist := distances[curr.item] + edge.weight
 
-				heap.insert((*graph)[curr.edge[i].to], curr.edge[i].weight)
+			if dist < distances[edge.to] {
+				distances[edge.to] = dist
+				prev[edge.to] = curr.item
+				heap.insert((*graph)[edge.to], edge.weight)
 			}
 		}
 	}
 
 	path := []int{}
 	curr := end
-
 	for prev[curr] != -1 {
 		path = append(path, prev[curr])
 		curr = prev[curr]
