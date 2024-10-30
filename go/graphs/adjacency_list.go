@@ -7,7 +7,7 @@ type Vertex struct {
 
 type AdjList []*Vertex
 
-func NewAdjList() (AdjList, Vertex) {
+func NewAdjList() AdjList {
 	var adjList AdjList = []*Vertex{
 		{Item: 0, Edge: []int{2, 5}},
 		{Item: 1, Edge: []int{4, 5}},
@@ -31,5 +31,5 @@ func NewAdjList() (AdjList, Vertex) {
 	//    \ /
 	//     0
 
-	return adjList, *adjList[1]
+	return adjList
 }

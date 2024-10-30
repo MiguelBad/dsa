@@ -35,7 +35,8 @@ func findNeedle(adjList graphs.AdjList, needle int, root graphs.Vertex) (bool, [
 }
 
 func main() {
-	adjList, root := graphs.NewAdjList()
+	adjList := graphs.NewAdjList()
+	root := *adjList[0]
 	needle := 0
 
 	found, path := findNeedle(adjList, needle, root)
