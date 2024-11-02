@@ -1,28 +1,40 @@
-def fib_iterative(n, low, high, fib):
-    if n == 0:
+def fib_iterative(n):
+    # where n is the nth fib
+    if n < 0:
+        print("n must be greater than 0")
+    elif n == 0:
         return 0
     elif n == 1:
         return 1
 
-    for _ in range(1, n):
-        fib = low + high
-        temp = high
-        high = low + high
-        low = temp
+    low = 0
+    high = 1
+    result = 0
+    for _ in range(n - 1):
+        result = low + high
+        low = high
+        high = result
 
-    return fib
-
-
-def fib_list_recursion(n):
-    if n == 0:
-        return [0]
-    elif n == 1:
-        return [0, 1]
-    else:
-        fib = fib_list_recursion(n - 1)
-        fib.append(fib[-1] + fib[-2])
-        return fib
+    return result
 
 
-print(fib_iterative(20, 0, 1, 0))
-print(fib_list_recursion(20))
+def fib_recursive(n):
+    temp = {}
+
+    def fib_helper(n, temp) -> int:
+        if n in temp:
+            return temp[n]
+
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+
+        result = fib_helper(n - 1, temp) + fib_helper(n - 2, temp)
+        temp[n] = result
+        return result
+
+    return fib_helper(n, temp)
+
+
+print(fib_recursive(10))
